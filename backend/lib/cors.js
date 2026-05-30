@@ -1,18 +1,49 @@
-function getAllowedOrigin(requestOrigin) {
-  const configuredOrigins = (process.env.FRONTEND_ORIGIN || "")
+const LOCAL_ORIGINS = new Set([
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://127.0.0.1:5173",
+  "http://127.0.0.1:5174",
+]);
+
+function isGitHubPagesOrigin(origin) {
+  try {
+    const { hostname, protocol } = new URL(origin);
+
+    return protocol === "https:" && hostname.endsWith(".github.io");
+  } catch {
+    return false;
+  }
+}
+
+function getConfiguredOrigins() {
+  return (process.env.FRONTEND_ORIGIN || "")
     .split(",")
-    .map((origin) => origin.trim())
+    .map((origin) => origin.trim().replace(/\/$/, ""))
     .filter(Boolean);
+}
 
-  if (configuredOrigins.length === 0) {
-    return requestOrigin || "*";
+function getAllowedOrigin(requestOrigin) {
+  if (!requestOrigin) {
+    return "*";
   }
 
-  if (configuredOrigins.includes(requestOrigin)) {
-    return requestOrigin;
+  const normalizedOrigin = requestOrigin.replace(/\/$/, "");
+  const configuredOrigins = getConfiguredOrigins();
+
+  if (
+    configuredOrigins.includes("*") ||
+    configuredOrigins.includes(normalizedOrigin) ||
+    LOCAL_ORIGINS.has(normalizedOrigin) ||
+    isGitHubPagesOrigin(normalizedOrigin)
+  ) {
+    return normalizedOrigin;
   }
 
-  return configuredOrigins[0];
+  if (configuredOrigins.length > 0) {
+    return configuredOrigins[0];
+  }
+
+  return normalizedOrigin;
 }
 
 function setCorsHeaders(req, res) {
@@ -27,4 +58,3 @@ function setCorsHeaders(req, res) {
 module.exports = {
   setCorsHeaders,
 };
-

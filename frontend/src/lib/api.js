@@ -1,13 +1,23 @@
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+const DEFAULT_API_BASE_URL = "https://justice-snowy-ten.vercel.app";
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL).replace(
+  /\/$/,
+  ""
+);
 
 export async function createVerdict(payload) {
-  const response = await fetch(`${API_BASE_URL}/api/verdict`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+  let response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}/api/verdict`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch {
+    throw new Error("无法连接到猫猫法庭后端，请检查后端部署地址。");
+  }
 
   let data = null;
 
@@ -23,4 +33,3 @@ export async function createVerdict(payload) {
 
   return data;
 }
-

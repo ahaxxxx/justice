@@ -38,18 +38,19 @@ function toText(value, fallback) {
 }
 
 function normalizeVerdict(rawVerdict) {
-  const responsibilityA = clampPercent(rawVerdict.responsibilityA, 50);
-  const rawResponsibilityB = clampPercent(rawVerdict.responsibilityB, 100 - responsibilityA);
+  const source = rawVerdict && typeof rawVerdict === "object" ? rawVerdict : {};
+  const responsibilityA = clampPercent(source.responsibilityA, 50);
+  const rawResponsibilityB = clampPercent(source.responsibilityB, 100 - responsibilityA);
   const responsibilityB =
     responsibilityA + rawResponsibilityB === 100 ? rawResponsibilityB : 100 - responsibilityA;
 
   return {
-    rootCause: toText(rawVerdict.rootCause, "双方真正需要处理的，是期待没有被说清楚。"),
+    rootCause: toText(source.rootCause, "双方真正需要处理的，是期待没有被说清楚。"),
     responsibilityA,
     responsibilityB,
-    verdict: toText(rawVerdict.verdict, "猫猫法官认为：先暂停互相证明谁更委屈，改成一起说明自己真正需要什么。"),
-    reconciliationTask: toText(rawVerdict.reconciliationTask, "双方各用一分钟复述对方的感受，再提出一个今天就能做到的小行动。"),
-    relationshipScore: clampPercent(rawVerdict.relationshipScore, 75),
+    verdict: toText(source.verdict, "猫猫法官认为：先暂停互相证明谁更委屈，改成一起说明自己真正需要什么。"),
+    reconciliationTask: toText(source.reconciliationTask, "双方各用一分钟复述对方的感受，再提出一个今天就能做到的小行动。"),
+    relationshipScore: clampPercent(source.relationshipScore, 75),
   };
 }
 

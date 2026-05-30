@@ -24,6 +24,7 @@ justice-cat/
 │   └── vite.config.js
 ├── backend/
 │   ├── api/
+│   │   ├── health.js
 │   │   └── verdict.js
 │   ├── lib/
 │   │   ├── cors.js
@@ -42,6 +43,16 @@ justice-cat/
 ```
 
 ## 本地开发
+
+线上版本推荐使用：
+
+```text
+前端 GitHub Pages: https://ahaxxxx.github.io/justice/
+后端 Vercel: https://justice-snowy-ten.vercel.app
+健康检查: https://justice-snowy-ten.vercel.app/api/health
+```
+
+前端源码已内置 Vercel 后端地址作为默认值；如果 GitHub Actions 没有配置 `VITE_API_BASE_URL`，也会请求 `https://justice-snowy-ten.vercel.app`。
 
 ### 1. 启动后端
 
@@ -77,7 +88,7 @@ cp .env.example .env
 在 `frontend/.env` 中填入：
 
 ```bash
-VITE_API_BASE_URL=http://localhost:3000
+VITE_API_BASE_URL=https://justice-snowy-ten.vercel.app
 ```
 
 启动前端：
@@ -93,11 +104,11 @@ npm run dev
 1. 在 Vercel 新建项目，Root Directory 选择 `backend`。
 2. 添加环境变量：
    - `DEEPSEEK_API_KEY`: DeepSeek API Key
-   - `FRONTEND_ORIGIN`: GitHub Pages 前端地址，例如 `https://yourname.github.io/your-repo`
+   - `FRONTEND_ORIGIN`: GitHub Pages 前端 origin，例如 `https://ahaxxxx.github.io`
 3. 部署后，后端接口为：
 
 ```text
-https://your-vercel-project.vercel.app/api/verdict
+https://justice-snowy-ten.vercel.app/api/verdict
 ```
 
 后端没有传统服务器，只有 Vercel Serverless Function。
@@ -109,9 +120,11 @@ https://your-vercel-project.vercel.app/api/verdict
 1. 把代码推送到 GitHub。
 2. 在 GitHub 仓库设置中打开 `Settings -> Pages`。
 3. Source 选择 `GitHub Actions`。
-4. 在仓库 `Settings -> Secrets and variables -> Actions` 添加变量或密钥：
-   - `VITE_API_BASE_URL`: Vercel 后端域名，例如 `https://your-vercel-project.vercel.app`
+4. 可选：在仓库 `Settings -> Secrets and variables -> Actions` 添加变量：
+   - `VITE_API_BASE_URL`: Vercel 后端域名，例如 `https://justice-snowy-ten.vercel.app`
 5. 推送到 `main` 分支后，工作流会自动构建并部署 `frontend/dist`。
+
+如果不添加 `VITE_API_BASE_URL`，工作流会使用默认后端 `https://justice-snowy-ten.vercel.app`。
 
 `frontend/vite.config.js` 使用相对路径 `base: "./"`，适合 GitHub Pages 项目页。
 
@@ -147,4 +160,3 @@ https://your-vercel-project.vercel.app/api/verdict
 - 支付是 mock 版本：点击「我已付款」后会在浏览器本地保存 `payment=true`。
 - 限流是 MVP 版本：每个 IP 每分钟最多 1 次请求。Serverless 内存限流不适合严肃生产环境，后续可替换为 Vercel KV、Upstash Redis 或数据库。
 - 当前未实现微信支付、申诉系统、用户账号和历史记录，但前后端结构已预留出清晰扩展位置。
-

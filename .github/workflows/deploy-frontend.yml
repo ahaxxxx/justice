@@ -29,12 +29,12 @@ jobs:
 
       - name: Install dependencies
         working-directory: frontend
-        run: npm install
+        run: npm ci
 
       - name: Build
         working-directory: frontend
         env:
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL || vars.VITE_API_BASE_URL }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL || vars.VITE_API_BASE_URL || 'https://justice-snowy-ten.vercel.app' }}
         run: npm run build
 
       - name: Configure Pages
