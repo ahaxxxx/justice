@@ -1,0 +1,15 @@
+{
+  "name": "justice-cat-backend",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "vercel": "^44.0.0"
+  }
+}
+
