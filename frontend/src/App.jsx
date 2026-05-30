@@ -3,7 +3,6 @@ import PaymentModal from "./components/PaymentModal.jsx";
 import VerdictForm from "./components/VerdictForm.jsx";
 import VerdictResult from "./components/VerdictResult.jsx";
 import { createVerdict } from "./lib/api.js";
-import { hasMockPayment, saveMockPayment } from "./lib/storage.js";
 
 const initialForm = {
   sideA: "",
@@ -69,17 +68,11 @@ export default function App() {
       return;
     }
 
-    if (!hasMockPayment()) {
-      setError("");
-      setIsPaymentOpen(true);
-      return;
-    }
-
-    submitVerdict();
+    setError("");
+    setIsPaymentOpen(true);
   }
 
   function handlePaymentConfirm() {
-    saveMockPayment();
     setIsPaymentOpen(false);
     submitVerdict();
   }
@@ -139,4 +132,3 @@ export default function App() {
     </main>
   );
 }
-

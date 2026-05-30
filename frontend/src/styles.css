@@ -385,7 +385,7 @@ textarea::placeholder {
 
 .payment-modal {
   position: relative;
-  width: min(440px, 100%);
+  width: min(460px, 100%);
   border: 1px solid rgba(255, 255, 255, 0.54);
   border-radius: 28px;
   background: #fffaf2;
@@ -413,6 +413,32 @@ textarea::placeholder {
 
 .payment-modal p {
   margin: 12px 0 20px;
+}
+
+.payment-qr-card {
+  display: grid;
+  place-items: center;
+  width: min(260px, 100%);
+  margin: 0 auto 14px;
+  border: 1px solid rgba(31, 35, 40, 0.1);
+  border-radius: 24px;
+  background: #ffffff;
+  padding: 14px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+}
+
+.payment-qr-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 16px;
+}
+
+.payment-modal__hint {
+  color: #8a8176 !important;
+  font-size: 0.88rem;
+  line-height: 1.6 !important;
 }
 
 .modal-close {
@@ -461,4 +487,3 @@ textarea::placeholder {
     place-items: center;
   }
 }
-

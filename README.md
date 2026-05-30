@@ -14,10 +14,11 @@ justice-cat/
 │   │   │   └── VerdictResult.jsx
 │   │   ├── lib/
 │   │   │   ├── api.js
-│   │   │   └── storage.js
 │   │   ├── App.jsx
 │   │   ├── main.jsx
 │   │   └── styles.css
+│   ├── public/
+│   │   └── payment-qr.svg
 │   ├── .env.example
 │   ├── index.html
 │   ├── package.json
@@ -53,6 +54,30 @@ justice-cat/
 ```
 
 前端源码已内置 Vercel 后端地址作为默认值；如果 GitHub Actions 没有配置 `VITE_API_BASE_URL`，也会请求 `https://justice-snowy-ten.vercel.app`。
+
+## 收款码配置
+
+当前支付流程是人工确认版：用户点击「开始仲裁」后会先看到收款码；用户付款并点击「我已付款，开始仲裁」后，前端才会调用后端 API 生成结果。
+
+默认会优先加载真实收款码：
+
+```text
+frontend/public/payment-qr.png
+```
+
+请把你的真实收款码图片放到 `frontend/public/`，并命名为：
+
+```text
+frontend/public/payment-qr.png
+```
+
+如果你想使用其他文件名，可以在 GitHub Actions 变量或 `frontend/.env` 中设置：
+
+```env
+VITE_PAYMENT_QR_URL=./payment-qr.png
+```
+
+如果 `payment-qr.png` 不存在，页面会自动显示项目自带的占位图 `payment-qr.svg`。
 
 ### 1. 启动后端
 
@@ -157,6 +182,6 @@ https://justice-snowy-ten.vercel.app/api/verdict
 
 ## MVP 说明
 
-- 支付是 mock 版本：点击「我已付款」后会在浏览器本地保存 `payment=true`。
+- 支付是人工确认版：用户扫码付款后点击「我已付款，开始仲裁」，前端才会调用后端生成判决。
 - 限流是 MVP 版本：每个 IP 每分钟最多 1 次请求。Serverless 内存限流不适合严肃生产环境，后续可替换为 Vercel KV、Upstash Redis 或数据库。
 - 当前未实现微信支付、申诉系统、用户账号和历史记录，但前后端结构已预留出清晰扩展位置。
